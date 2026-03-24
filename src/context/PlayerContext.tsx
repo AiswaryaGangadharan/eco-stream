@@ -70,9 +70,9 @@ export function PlayerProvider({ children, allVideos }: PlayerProviderProps) {
       setIsMinimized(false);
       setIsPlaying(true);
 
-      if (saved > 0) {
+      if (isFinite(saved) && saved > 0) {
         setTimeout(() => {
-          if (videoRef.current) videoRef.current.currentTime = saved;
+          if (videoRef.current && isFinite(saved)) videoRef.current.currentTime = saved;
           setCurrentTime(saved);
         }, 300);
       } else {
@@ -95,7 +95,9 @@ export function PlayerProvider({ children, allVideos }: PlayerProviderProps) {
     const vid = videoRef.current;
 
     if (vid && activeVideo) {
-      savePosition(activeVideo.id, vid.currentTime);
+      if (isFinite(vid.currentTime)) {
+        savePosition(activeVideo.id, vid.currentTime);
+      }
       vid.pause();
     }
 
@@ -116,7 +118,9 @@ export function PlayerProvider({ children, allVideos }: PlayerProviderProps) {
       vid.play();
       setIsPlaying(true);
     } else {
-      savePosition(activeVideo.id, vid.currentTime);
+      if (isFinite(vid.currentTime)) {
+        savePosition(activeVideo.id, vid.currentTime);
+      }
       vid.pause();
       setIsPlaying(false);
     }
@@ -125,12 +129,12 @@ export function PlayerProvider({ children, allVideos }: PlayerProviderProps) {
   // ── Seek ──
   const seek = (seconds: number) => {
     const vid = videoRef.current;
-    if (!vid) return;
+    if (!vid || !isFinite(vid.duration) || !isFinite(vid.currentTime)) return;
 
-    vid.currentTime = Math.max(
-      0,
-      Math.min(vid.currentTime + seconds, vid.duration)
-    );
+    const newTime = vid.currentTime + seconds;
+    if (isFinite(newTime)) {
+      vid.currentTime = Math.max(0, Math.min(newTime, vid.duration));
+    }
   };
 
   // ── Volume ──

@@ -64,6 +64,7 @@ export default function VideoPlayer() {
   const [isWatchLater, setIsWatchLater] = useState(false);
   const [showShareToast, setShowShareToast] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   
   const [buffered, setBuffered] = useState(0);
   const [hoverTime, setHoverTime] = useState<number | null>(null);
@@ -264,6 +265,46 @@ export default function VideoPlayer() {
     setPlaybackSpeed(next);
   };
 
+  const playerContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleFsChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', handleFsChange);
+    document.addEventListener('webkitfullscreenchange', handleFsChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFsChange);
+      document.removeEventListener('webkitfullscreenchange', handleFsChange);
+    };
+  }, []);
+
+  const toggleFullscreen = useCallback(async () => {
+    if (!playerContainerRef.current) return;
+    try {
+      if (!document.fullscreenElement) {
+        if (playerContainerRef.current.requestFullscreen) {
+          await playerContainerRef.current.requestFullscreen();
+        } else if ((playerContainerRef.current as any).webkitRequestFullscreen) {
+          await (playerContainerRef.current as any).webkitRequestFullscreen();
+        }
+        // Attempt to lock orientation to landscape on mobile
+        if (screen.orientation && (screen.orientation as any).lock) {
+          await (screen.orientation as any).lock('landscape').catch(() => {});
+        }
+      } else {
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        } else if ((document as any).webkitExitFullscreen) {
+          await (document as any).webkitExitFullscreen();
+        }
+        if (screen.orientation && (screen.orientation as any).unlock) {
+          screen.orientation.unlock();
+        }
+      }
+    } catch (err) {
+      console.warn("Fullscreen toggle failed:", err);
+    }
+  }, []);
+
   if (!activeVideo) return null;
 
   const volIcon = volume === 0 ? '🔇' : volume < 0.4 ? '🔉' : '🔊';
@@ -278,6 +319,7 @@ export default function VideoPlayer() {
 
   return (
     <motion.div 
+      ref={playerContainerRef}
       style={{
         ...cssVars,
         pointerEvents: 'auto',
@@ -621,7 +663,8 @@ export default function VideoPlayer() {
                 <span className="text-white text-[10px] font-semibold leading-none">10s</span>
               </button>
             </div>
-            <div className="hidden md:flex items-center gap-3 mt-5 px-2 relative">
+            <div className="flex items-center justify-between gap-3 mt-5 px-2 relative">
+              <div className="hidden sm:flex items-center gap-3 flex-1">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -655,23 +698,37 @@ export default function VideoPlayer() {
               <span className="text-white/40 text-xs w-8 tabular-nums" aria-hidden="true">
                 {Math.round(volume * 100)}%
               </span>
+              </div>
 
-              {/* Settings Toggle Button */}
-              <button
-                onClick={(e) => { e.stopPropagation(); setIsSettingsOpen(!isSettingsOpen); }}
-                className="p-2 ml-4 text-white/60 hover:text-white transition-colors"
-                aria-label="Settings"
-                aria-expanded={isSettingsOpen}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="3"></circle>
-                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                </svg>
-              </button>
+              <div className="flex items-center gap-2">
+                {/* Settings Toggle Button */}
+                <button
+                  onClick={(e) => { e.stopPropagation(); setIsSettingsOpen(!isSettingsOpen); }}
+                  className={`p-2 rounded-full transition-colors ${isSettingsOpen ? 'bg-white/20 text-white' : 'text-white/60 hover:text-white'}`}
+                  aria-label="Settings"
+                  aria-expanded={isSettingsOpen}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                  </svg>
+                </button>
+
+                {/* Fullscreen Toggle Button */}
+                <button
+                  onClick={(e) => { e.stopPropagation(); toggleFullscreen(); }}
+                  className="p-2 text-white/60 hover:text-white transition-colors"
+                  aria-label="Toggle Fullscreen"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                  </svg>
+                </button>
+              </div>
 
               {/* Settings Menu Popover */}
               {isSettingsOpen && (
-                <div onClick={(e) => e.stopPropagation()} className="absolute bottom-12 right-0 w-64 bg-zinc-900/95 backdrop-blur-xl border border-white/10 rounded-2xl p-2 shadow-2xl z-50 text-sm overflow-hidden select-none">
+                <div onClick={(e) => e.stopPropagation()} className="absolute bottom-14 right-0 w-64 max-h-[70vh] overflow-y-auto bg-zinc-900/95 backdrop-blur-xl border border-white/10 rounded-2xl p-2 shadow-2xl z-50 text-sm select-none scrollbar-hide">
                   <div className="flex items-center justify-between px-3 py-2.5 hover:bg-white/10 rounded-xl cursor-pointer transition-colors" onClick={() => setIsLooping(!isLooping)}>
                     <div className="flex items-center gap-3"><RotateCcw size={16}/> <span>Loop</span></div>
                     <span className="text-white/50 text-xs">{isLooping ? 'On' : 'Off'}</span>
@@ -702,7 +759,7 @@ export default function VideoPlayer() {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: 400, opacity: 0 }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className="absolute right-0 top-0 bottom-0 w-80 md:w-96 bg-zinc-900/95 backdrop-blur-xl border-l border-white/10 z-[60] flex flex-col shadow-2xl"
+          className="absolute right-0 top-0 bottom-0 w-72 sm:w-80 md:w-96 bg-zinc-900/95 backdrop-blur-xl border-l border-white/10 z-[60] flex flex-col shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex items-center justify-between p-5 border-b border-white/5">
@@ -753,7 +810,7 @@ export default function VideoPlayer() {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: 400, opacity: 0 }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className="absolute right-0 top-0 bottom-0 w-80 md:w-96 bg-zinc-900/95 backdrop-blur-xl border-l border-white/10 z-[60] flex flex-col shadow-2xl"
+          className="absolute right-0 top-0 bottom-0 w-72 sm:w-80 md:w-96 bg-zinc-900/95 backdrop-blur-xl border-l border-white/10 z-[60] flex flex-col shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex items-center justify-between p-5 border-b border-white/5">

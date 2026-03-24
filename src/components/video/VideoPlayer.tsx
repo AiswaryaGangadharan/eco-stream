@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { RotateCcw, RotateCw } from 'lucide-react';
 import { usePlayer } from '../../context/PlayerContext';
@@ -122,6 +122,15 @@ export default function VideoPlayer() {
       if (volumeHideTimer.current) clearTimeout(volumeHideTimer.current);
     };
   }, [activeVideo, setIsPlaying, setVolume]);
+
+  useEffect(() => {
+    if (!isMinimized) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [isMinimized]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -272,7 +281,7 @@ export default function VideoPlayer() {
       style={{
         ...cssVars,
         pointerEvents: 'auto',
-        touchAction: isMinimized ? 'none' : 'auto',
+        touchAction: 'none',
       }}
       layoutId={`card-${activeVideo.id}`}
       drag={isMinimized}
@@ -299,7 +308,7 @@ export default function VideoPlayer() {
               opacity: 1,
               scale: 1,
               borderRadius: 0,
-              zIndex: 50,
+              zIndex: 100,
             }
       }
       exit={{ opacity: 0, scale: 0.95 }}
@@ -321,6 +330,7 @@ export default function VideoPlayer() {
         src={activeVideo.src}
         className="absolute inset-0 w-full h-full object-contain"
         playsInline
+        muted
         loop={isLooping}
         onTimeUpdate={(e) => {
           setCurrentTime(e.currentTarget.currentTime);
@@ -356,6 +366,18 @@ export default function VideoPlayer() {
             className="px-6 py-2 bg-white text-black rounded-full font-bold hover:bg-zinc-200 transition-colors"
           >
             Try Again
+          </button>
+        </div>
+      )}
+
+      {/* Central Play/Pause Fallback (When Maximized and not Playing) */}
+      {!isMinimized && !isPlaying && !error && (
+        <div className="absolute inset-0 flex items-center justify-center z-30">
+          <button 
+            onClick={(e) => { e.stopPropagation(); togglePlay(); }}
+            className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all scale-110 active:scale-95 shadow-2xl"
+          >
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
           </button>
         </div>
       )}

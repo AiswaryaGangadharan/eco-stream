@@ -23,6 +23,13 @@ Eco-Stream is a high-fidelity, modern video streaming platform designed for both
 - **Dynamic Background**: Animated mesh-gradient auroras with cinematic grain and sub-surface scattering.
 - **Glassmorphic UI**: High-fidelity blurs, subtle gradients, and elegant micro-animations using `framer-motion`.
 
+### ⌨️ Desktop Shortcuts
+- **Space / K**: Play/Pause.
+- **F**: Toggle Fullscreen/Minimize.
+- **M**: Mute/Unmute.
+- **Arrows**: Seek and Volume control.
+- **0-9**: Skip to video segments.
+
 ---
 
 ## 🛠️ Tech Stack
@@ -76,6 +83,16 @@ To test the application on your mobile device over the local network:
 4. On your mobile browser, navigate to `http://YOUR_IP:3000`.
 
 *Note: HMR (Hot Module Replacement) is enabled for local network testing in `next.config.ts`.*
+
+---
+
+## 🛠️ Troubleshooting Mobile Access
+
+If you cannot reach the site via `http://YOUR_IP:3000`:
+- **Firewall**: Ensure your computer's firewall allows incoming connections on port 3000.
+- **Network Isolation**: Some public or guest Wi-Fi networks prevent devices from communicating with each other. Use a private network.
+- **IP Change**: If your router restarts, your local IP might change. Verify with `ifconfig` or your system settings.
+- **Port Conflict**: If port 3000 is busy, Next.js might use 3001. Check the terminal output when running `npm run dev`.
 
 ---
 

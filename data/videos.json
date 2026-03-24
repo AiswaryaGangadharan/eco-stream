@@ -1,0 +1,95 @@
+[
+  {
+    "category": "Ocean Conservation",
+    "slug": "ocean-health",
+    "contents": [
+      {
+        "title": "The Great Barrier Reef Revival",
+        "mediaUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnailUrl": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&fit=crop",
+        "duration": "03:45",
+        "impactScore": 98
+      },
+      {
+        "title": "Deep Sea Secrets",
+        "mediaUrl": "https://media.w3.org/2010/05/sintel/trailer.mp4",
+        "thumbnailUrl": "https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=800&fit=crop",
+        "duration": "05:12",
+        "impactScore": 85
+      }
+    ]
+  },
+  {
+    "category": "Renewable Energy",
+    "slug": "clean-power",
+    "contents": [
+      {
+        "title": "Harnessing the Sahara Sun",
+        "mediaUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        "thumbnailUrl": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&fit=crop",
+        "duration": "06:15",
+        "impactScore": 95
+      },
+      {
+        "title": "Offshore Wind: The New Frontier",
+        "mediaUrl": "https://media.w3.org/2010/05/sintel/trailer.mp4",
+        "thumbnailUrl": "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&fit=crop",
+        "duration": "04:50",
+        "impactScore": 91
+      }
+    ]
+  },
+  {
+    "category": "Reforestation",
+    "slug": "forest-growth",
+    "contents": [
+      {
+        "title": "Amazon Rainforest: 2026 Vision",
+        "mediaUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "thumbnailUrl": "https://images.unsplash.com/photo-1511497584788-876760111969?w=800&fit=crop",
+        "duration": "04:20",
+        "impactScore": 92
+      }
+    ]
+  },
+  {
+    "category": "Urban Sustainability",
+    "slug": "green-cities",
+    "contents": [
+      {
+        "title": "Vertical Forests of Milan",
+        "mediaUrl": "https://www.w3schools.com/html/mov_bbb.mp4",
+        "thumbnailUrl": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&fit=crop",
+        "duration": "03:10",
+        "impactScore": 89
+      },
+      {
+        "title": "Zero Waste City Initiatives",
+        "mediaUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "thumbnailUrl": "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&fit=crop",
+        "duration": "07:22",
+        "impactScore": 94
+      }
+    ]
+  },
+  {
+    "category": "Wildlife Protection",
+    "slug": "biodiversity",
+    "contents": [
+      {
+        "title": "The Last White Rhinos",
+        "mediaUrl": "https://media.w3.org/2010/05/sintel/trailer.mp4",
+        "thumbnailUrl": "https://images.unsplash.com/photo-1516466723877-e4ec1d736c8a?w=800&fit=crop",
+        "duration": "05:45",
+        "impactScore": 99
+      },
+      {
+        "title": "Protecting the Arctic Tundra",
+        "mediaUrl": "https://www.w3schools.com/html/movie.mp4",
+        "thumbnailUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&fit=crop",
+        "duration": "04:15",
+        "impactScore": 93
+      }
+    ]
+  }
+]

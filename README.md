@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌿 Eco-Stream
 
-## Getting Started
+Eco-Stream is a high-fidelity, modern video streaming platform designed for both desktop and mobile excellence. It features a unified video player with advanced gesture controls, a dynamic atmospheric background, and a premium Glassmorphic UI.
 
-First, run the development server:
+---
 
+## 🚀 Features
+
+### 🎬 Advanced Video Player
+- **Unified Experience**: Seamless transitions between full-screen and mini-player (PiP) modes.
+- **Cinema Mode**: Dynamic background colors based on the video's dominant palette.
+- **High-Fidelity Controls**: Custom progress bar with buffer visualization, thumbnail scrubbing, and segment highlights.
+
+### 📱 Mobile Excellence
+- **Intelligent Gestures**: 
+  - **Swipe Down**: Minimize player.
+  - **Double-Tap (Left/Right)**: Seek +/- 10 seconds.
+  - **Vertical Swipe (Left)**: Adjust volume.
+- **Landscape Support**: Native fullscreen API integration with orientation locking for cinematic viewing.
+- **Autoplay Compliance**: Muted initial playback and manual "Play" fallbacks for a smooth mobile experience.
+
+### 🎨 Design & Aesthetics
+- **Dynamic Background**: Animated mesh-gradient auroras with cinematic grain and sub-surface scattering.
+- **Glassmorphic UI**: High-fidelity blurs, subtle gradients, and elegant micro-animations using `framer-motion`.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 15+](https://nextjs.org/) (App Router, Turbopack)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **State Management**: [React Context API](https://react.dev/reference/react/useContext)
+
+---
+
+## 📥 Getting Started
+
+### 1. Prerequisites
+- Node.js 18.x or later
+- npm or pnpm
+
+### 2. Installation
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/AiswaryaGangadharan/eco-stream.git
+cd eco-stream
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Development
+Run the development server:
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) to view the app locally.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Build for Production
+```bash
+npm run build
+npm run start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 📱 Mobile Testing
 
-To learn more about Next.js, take a look at the following resources:
+To test the application on your mobile device over the local network:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Ensure your phone and development machine are on the **same Wi-Fi network**.
+2. Run the dev server with network access:
+   ```bash
+   npm run dev -- -H 0.0.0.0
+   ```
+3. Find your local IP address (e.g., `192.168.1.6`).
+4. On your mobile browser, navigate to `http://YOUR_IP:3000`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+*Note: HMR (Hot Module Replacement) is enabled for local network testing in `next.config.ts`.*
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📂 Project Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `/app`: Next.js App Router (pages and layouts)
+- `/src/components`: UI, Video, and Player components
+- `/src/context`: Global video player state
+- `/src/hooks`: Custom hooks (dominant color, playback memory)
+- `/data`: Mocked video data and metadata

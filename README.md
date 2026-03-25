@@ -1,105 +1,146 @@
-# 🌿 Eco-Stream
+# 🎬 Eco-Stream – Video Streaming Platform
 
-Eco-Stream is a high-fidelity, modern video streaming platform designed for both desktop and mobile excellence. It features a unified video player with advanced gesture controls, a dynamic atmospheric background, and a premium Glassmorphic UI.
+Eco-Stream is a modern, responsive video streaming web application designed to deliver a seamless viewing experience with features like continuous playback, mini-player mode, and smooth navigation.
+
+This project focuses not only on UI/UX but also on building a clean, scalable component architecture and efficient state management.
 
 ---
 
 ## 🚀 Features
 
-### 🎬 Advanced Video Player
-- **Unified Experience**: Seamless transitions between full-screen and mini-player (PiP) modes.
-- **Cinema Mode**: Dynamic background colors based on the video's dominant palette.
-- **High-Fidelity Controls**: Custom progress bar with buffer visualization, thumbnail scrubbing, and segment highlights.
+- 🎥 Video playback with custom player
+- 🧭 Category-based video browsing
+- 📺 Mini-player for continuous viewing
+- 🔄 Seamless transition between player and mini-player
+- 📱 Responsive design for mobile and desktop
+- ⚡ Optimized rendering using component separation
 
-### 📱 Mobile Excellence
-- **Intelligent Gestures**: 
-  - **Swipe Down**: Minimize player.
-  - **Double-Tap (Left/Right)**: Seek +/- 10 seconds.
-  - **Vertical Swipe (Left)**: Adjust volume.
-- **Landscape Support**: Native fullscreen API integration with orientation locking for cinematic viewing.
-- **Autoplay Compliance**: Muted initial playback and manual "Play" fallbacks for a smooth mobile experience.
+---
 
-### 🎨 Design & Aesthetics
-- **Dynamic Background**: Animated mesh-gradient auroras with cinematic grain and sub-surface scattering.
-- **Glassmorphic UI**: High-fidelity blurs, subtle gradients, and elegant micro-animations using `framer-motion`.
+## 🧠 Approach & Thought Process
 
-### ⌨️ Desktop Shortcuts
-- **Space / K**: Play/Pause.
-- **F**: Toggle Fullscreen/Minimize.
-- **M**: Mute/Unmute.
-- **Arrows**: Seek and Volume control.
-- **0-9**: Skip to video segments.
+Instead of directly implementing features, the application was broken down into core functional areas:
+
+1. **Content Discovery**
+   - Structured video data into categories for scalable rendering
+   - Designed reusable `VideoRow` and `VideoCard` components
+
+2. **Playback System**
+   - Built a dedicated `VideoPlayer` component to isolate playback logic
+   - Avoided embedding video logic inside multiple components to improve maintainability
+
+3. **Mini-Player Architecture**
+   - Implemented a state-driven UI approach:
+     - Full player and mini-player are conditionally rendered
+   - Ensured uninterrupted playback during transitions
+
+4. **State Management Strategy**
+   - Lifted video state to a parent-level component
+   - Enabled consistent playback across UI states
+
+---
+
+## ⚙️ Key Technical Decisions
+
+### 1. Component Separation
+The video player was isolated into its own component to:
+- Prevent unnecessary re-renders
+- Improve code readability and scalability
+
+### 2. State Lifting
+Playback-related state (active video, player mode) is managed at a higher level:
+- Ensures continuity when switching between views
+- Avoids duplicated logic
+
+### 3. Conditional Rendering vs Routing
+Used conditional rendering instead of route-based navigation for the player:
+- Prevents video reload
+- Maintains playback position
+
+---
+
+## 🤖 AI Usage Disclosure
+
+AI tools were used as a **supporting aid**, not as a replacement for development.
+
+Used for:
+- Debugging TypeScript issues
+- Improving component structure
+- Identifying UI/UX improvements
+
+However:
+- Core logic, state handling, and architecture decisions were implemented and refined manually
+- All generated code was reviewed, modified, and integrated thoughtfully
+
+---
+
+## 🚧 Challenges & Solutions
+
+### 1. Mini-Player Black Screen Issue
+**Problem:** Background UI was blocked when mini-player was active  
+**Solution:** Fixed layout layering and z-index structure
+
+---
+
+### 2. Fullscreen Playback Issue
+**Problem:** Audio played but video was not visible  
+**Solution:** Corrected container styling and ensured proper rendering context
+
+---
+
+### 3. State Synchronization
+**Problem:** Playback interruption when switching modes  
+**Solution:** Lifted state and centralized video control logic
+
+---
+
+## 📱 Responsiveness
+
+- Designed to adapt across screen sizes
+- Layout adjusts dynamically for mobile and desktop
+- Future enhancement planned for improved landscape mode experience
+
+---
+
+## ⚠️ Known Limitations
+
+- Playback speed controls are basic and can be enhanced
+- Fullscreen behavior may vary across browsers
+- Mini-player transitions can be further optimized for low-end devices
+
+---
+
+## 🔮 Future Enhancements
+
+- Advanced playback controls (speed, quality selection)
+- Improved mobile landscape experience
+- Persistent watch history
+- User authentication and personalized recommendations
+- Performance optimizations for large datasets
+
+---
+
+## 🧪 Developer Notes
+
+- Focus was placed on **clarity of logic and maintainability**
+- Trade-offs were made to prioritize user experience and smooth playback
+- Code is structured to allow easy feature expansion
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Framework**: [Next.js 15+](https://nextjs.org/) (App Router, Turbopack)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Animations**: [Framer Motion](https://www.framer.com/motion/)
-- **Icons**: [Lucide React](https://lucide.dev/)
-- **State Management**: [React Context API](https://react.dev/reference/react/useContext)
+- **Frontend:** React / Next.js
+- **Language:** TypeScript
+- **Styling:** CSS / Tailwind (if used)
+- **State Management:** React Hooks
 
 ---
 
-## 📥 Getting Started
+## ▶️ Getting Started
 
-### 1. Prerequisites
-- Node.js 18.x or later
-- npm or pnpm
-
-### 2. Installation
 ```bash
-git clone https://github.com/AiswaryaGangadharan/eco-stream.git
+git clone <your-repo-url>
 cd eco-stream
 npm install
-```
-
-### 3. Development
-Run the development server:
-```bash
 npm run dev
-```
-Open [http://localhost:3000](http://localhost:3000) to view the app locally.
-
-### 4. Build for Production
-```bash
-npm run build
-npm run start
-```
-
----
-
-## 📱 Mobile Testing
-
-To test the application on your mobile device over the local network:
-
-1. Ensure your phone and development machine are on the **same Wi-Fi network**.
-2. Run the dev server with network access:
-   ```bash
-   npm run dev -- -H 0.0.0.0
-   ```
-3. Find your local IP address (e.g., `192.168.1.6`).
-4. On your mobile browser, navigate to `http://YOUR_IP:3000`.
-
-*Note: HMR (Hot Module Replacement) is enabled for local network testing in `next.config.ts`.*
-
----
-
-## 🛠️ Troubleshooting Mobile Access
-
-If you cannot reach the site via `http://YOUR_IP:3000`:
-- **Firewall**: Ensure your computer's firewall allows incoming connections on port 3000.
-- **Network Isolation**: Some public or guest Wi-Fi networks prevent devices from communicating with each other. Use a private network.
-- **IP Change**: If your router restarts, your local IP might change. Verify with `ifconfig` or your system settings.
-- **Port Conflict**: If port 3000 is busy, Next.js might use 3001. Check the terminal output when running `npm run dev`.
-
----
-
-## 📂 Project Structure
-
-- `/app`: Next.js App Router (pages and layouts)
-- `/src/components`: UI, Video, and Player components
-- `/src/context`: Global video player state
-- `/src/hooks`: Custom hooks (dominant color, playback memory)
-- `/data`: Mocked video data and metadata
